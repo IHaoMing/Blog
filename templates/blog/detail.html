@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+        {% block o-main %}
+         
+                
+                <article class="uk-article">
+                    <h1 class="uk-article-title"><a href="#">{{post.title}}</a></h1>
+                    <p class="o-meta uk-article-meta">
+                        <a href="#">{{ post.author }}</a><!--作者-->
+                        <i class="o-icon uk-icon-calendar-o"></i>
+                        <a href="{% url 'blog:archives' post.created_time.year post.created_time.month %}">{{ post.created_time }}</a><!--日期归档-->
+                        <i class="o-icon uk-icon-book"></i>
+                        <a href="#">
+                        <a href="{% url 'blog:category' post.category.pk %}">{{ post.category.name }}</a><!--分类-->
+                        <i class="o-icon uk-icon-tags"></i>
+                        <a href="#">洛神赋</a>,
+                        <a href="#">图片</a>,
+                        <a href="#">凤梨</a><!--文章标签-->
+                        <i class="o-icon uk-icon-eye"></i>
+                        <a href="#">{{ post.views }}</a><!--阅读量-->
+                        <i class="o-icon uk-icon-comments-o"></i>
+                        <a href="#">{{ post.comment_set.count }}</a><!--评论数-->
+                    </p>
+                    <div class="uk-article">
+                        {{ post.body|safe }}
+                      </div>
+                    <hr class="uk-article-divider" />
+                </article>
+            
+                 <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook">Facebook</a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ好友</a></div>
+                <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+                <section class="comment-area" id="comment-area">
+                    <hr>
+                    <h3>发表评论</h3>
+                    <form action="{% url 'comments:post_comment' post.pk %}" method="post" class="comment-form">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label for="{{ form.name.id_for_label }}">名字：</label>
+                          {{ form.name }}
+                          {{ form.name.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          <label for="{{ form.email.id_for_label }}">邮箱：</label>
+                          {{ form.email }}
+                          {{ form.email.errors }}
+                        </div>
+                        <div class="col-md-4">
+                          <label for="{{ form.url.id_for_label }}">URL：</label>
+                          {{ form.url }}
+                          {{ form.url.errors }}
+                        </div>
+                        <div class="col-md-12">
+                          <label for="{{ form.text.id_for_label }}">评论：</label>
+                          {{ form.text }}
+                          {{ form.text.errors }}
+                          <button type="submit" class="comment-btn">发表</button>
+                        </div>
+                      </div>    <!-- row -->
+                    </form>
+                    <div class="comment-list-panel">
+                        <h3>评论列表，共 <span>4</span> 条评论</h3>
+                        <ul class="comment-list list-unstyled">
+                          {% for comment in comment_list %}
+                          <li class="comment-item">
+                            <span class="nickname">{{ comment.name }}</span>
+                            <time class="submit-date">{{ comment.created_time }}</time>
+                            <div class="text">
+                              {{ comment.text }}
+                            </div>
+                          </li>
+                          {% empty %}
+                          暂无评论
+                          {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+        {% endblock o-main %}
+           
